@@ -7,13 +7,15 @@ import re
 import socket
 from errno import ENOTCONN
 
+from gunicorn._compat import bytes_to_str
 from gunicorn.http.unreader import SocketUnreader
 from gunicorn.http.body import ChunkedReader, LengthReader, EOFReader, Body
 from gunicorn.http.errors import (InvalidHeader, InvalidHeaderName, NoMoreData,
     InvalidRequestLine, InvalidRequestMethod, InvalidHTTPVersion,
     LimitRequestLine, LimitRequestHeaders)
 from gunicorn.http.errors import InvalidProxyLine, ForbiddenProxyRequest
-from gunicorn.six import BytesIO, urlsplit, bytes_to_str
+from gunicorn.six import BytesIO
+from gunicorn._compat import urlsplit
 
 MAX_REQUEST_LINE = 8190
 MAX_HEADERS = 32768
@@ -321,7 +323,10 @@ class Request(Message):
         else:
             self.uri = bits[1]
 
-        parts = urlsplit(self.uri)
+        try:
+            parts = urlsplit(self.uri)
+        except ValueError:
+            raise InvalidRequestLine(line)
         self.path = parts.path or ""
         self.query = parts.query or ""
         self.fragment = parts.fragment or ""

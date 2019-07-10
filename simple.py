@@ -2,11 +2,15 @@ import os
 import socketserver as SocketServer
 
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from flask.ext.bootstrap import Bootstrap
-from flask.ext.wtf import Form
+# from flask.ext.bootstrap import Bootstrap
+# from flask.ext.wtf import Form
+# from flask.ext.sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
+from flask_wtf import Form
+from flask_sqlalchemy import SQLAlchemy
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required, Length
-from flask.ext.sqlalchemy import SQLAlchemy
+
 
 
 app = Flask(__name__)
